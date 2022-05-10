@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA;;;;GAIG;AACH,AAAA,OAAO,CAAA;EACH,OAAO,EAAC,IAAI;CACf",
+    "sources": [
+        "adminGlobal.scss"
+    ],
+    "names": [],
+    "file": "adminGlobal.css"
+}

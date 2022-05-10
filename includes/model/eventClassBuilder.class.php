@@ -45,8 +45,6 @@ class eventBuilder{
     #endregion
     #region PostValues
         public function getPostValues(){return $this->postValues->getPostValues();}
-        public function handleGetAction($get_array){return $this->postValues->handleGetAction($get_array);} 
-        public function getGetValues(){return $this->postValues->getGetValues();}
     #endregion
     #region Lists
         public function getUsersById($id){return $this->eventlist->getUsersById($id);}
@@ -66,6 +64,8 @@ class eventBuilder{
         public function save($input_array){return $this->storeData->save($input_array);}
         public function update($input_array){return $this->storeData->update($input_array);}
         public function delete($input_array){return $this->storeData->delete($input_array);}
+        public function handleGetAction($get_array){return $this->storeData->handleGetAction($get_array);} 
+        public function getGetValues(){return $this->storeData->getGetValues();}
     #endregion
     #region repetitive ID Get & set
         public function setId( $id ) {

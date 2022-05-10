@@ -29,7 +29,7 @@ class eventStoreData{
             }
             global $wpdb;
             if($input_array['p'] == 'meo_admin_event_apply_list'){
-            // Insert query
+
             $wpdb->query($wpdb->prepare("INSERT INTO `". $this->EventSignupTable()."` ( `event_title`, `event_user`)".
             " VALUES ( '%s', '%s');",$input_array['titel'],
             $input_array['gebruiker']) );
@@ -42,14 +42,13 @@ class eventStoreData{
                 " VALUES ( '%s', '%s');",$input_array['name'],
                 $input_array['description']) );
             }
-            // Error ? It's in there:
+
             if ( !empty($wpdb->last_error) ){
                 $this->last_error = $wpdb->last_error;
                 return FALSE;
             }
 
         } catch (Exception $exc) {
-            // @todo: Add error handling
             echo '<pre>'. $exc->getTraceAsString() .'</pre>';
         }
     return TRUE;
@@ -91,7 +90,7 @@ public function update($input_array){
             $input_array['description'], $input_array['id']) );
         }
     } catch (Exception $exc) {
-        // @todo: Fix error handlin
+
         echo $exc->getTraceAsString();
         $this->last_error = $exc->getMessage();
         return FALSE;
@@ -102,32 +101,72 @@ public function update($input_array){
 
 public function delete($input_array){
     try {
-        // Check input id
         if (!isset($input_array['id']) ) throw new Exception(__("Missing mandatory fields") );
         global $wpdb;
-        // Delete row by provided id (WordPress style)
+
         if($input_array['p'] == 'meo_admin_event_apply_list'){
         $wpdb->delete( $this->EventSignupTable(),
             array( 'id' => $input_array['id'] ),
             array( '%d' ) );
         }elseif($input_array['p'] == 'meo_admin_event_category'){
             $wpdb->delete( $this->EventCategoryTable(),
-            array( 'id' => $input_array['id'] ),
+            array( 'id_event_category' => $input_array['id'] ),
             array( '%d' ) );
         }else{
             $wpdb->delete( $this->EventTypeTable(),
-            array( 'id' => $input_array['id'] ),
+            array( 'id_event_type' => $input_array['id'] ),
             array( '%d' ) );
         }
         if ( !empty($wpdb->last_error) ){
             throw new Exception( $wpdb->last_error);
         }
     } catch (Exception $exc) {
-        echo '<pre>'. $exc->getTraceAsString() .'</pre>';
     }
 
     return TRUE;
 }
+
+    public function handleGetAction( $get_array ){
+        $action = '';
+    
+        switch($get_array['action']){
+            case 'update':
+
+                if ( !is_null($get_array['id']) ){
+                    $action = $get_array['action'];
+                }
+                break;
+    
+            case 'delete':
+
+                if ( !is_null($get_array['id']) ){
+                    $this->delete($get_array);
+                }
+                $action = 'delete';
+                break;
+    
+            default:
+
+                    break;
+        }
+        return $action;
+    }
+
+    public function getGetValues(){
+
+        $get_check_array = array (
+
+            'action' => array('filter' => FILTER_SANITIZE_STRING ),
+
+
+            'id' => array('filter' => FILTER_VALIDATE_INT ));
+
+
+        $inputs = filter_input_array( INPUT_GET, $get_check_array );
+
+        return $inputs;
+
+    }
 
 }
 ?>

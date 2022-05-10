@@ -38,49 +38,5 @@ class eventPostValues{
         //RTS
         return $inputs;
       }
-
-
-      public function handleGetAction( $get_array ){
-        $action = '';
-    
-        switch($get_array['action']){
-            case 'update':
-                // Indicate current action is update if id provided
-                if ( !is_null($get_array['id']) ){
-                    $action = $get_array['action'];
-                }
-                break;
-    
-            case 'delete':
-                // Delete current id if provided
-                if ( !is_null($get_array['id']) ){
-                    $this->delete($get_array);
-                }
-                $action = 'delete';
-                break;
-    
-            default:
-                // Oops
-                    break;
-        }
-        return $action;
-    }
-
-    public function getGetValues(){
-        //Define the check for params
-        $get_check_array = array (
-            //Action
-            'action' => array('filter' => FILTER_SANITIZE_STRING ),
-
-            //Id of current row
-            'id' => array('filter' => FILTER_VALIDATE_INT ));
-
-        //Get filtered input:
-        $inputs = filter_input_array( INPUT_GET, $get_check_array );
-
-        // RTS
-        return $inputs;
-
-    }
 }
 ?>
