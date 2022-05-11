@@ -4,10 +4,10 @@
  * Proprietary and confidential
  * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
  */
-require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR. '/eventClassTables.class.php');
-require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR. '/eventClassPostValues.class.php');
-require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR. '/eventClassLists.class.php');
-require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR. '/eventClassStoreData.class.php');
+require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . '/eventClassTables.class.php');
+require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . '/eventClassPostValues.class.php');
+require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . '/eventClassLists.class.php');
+require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . '/eventClassStoreData.class.php');
 class eventBuilder{
 
     // Repetitive id

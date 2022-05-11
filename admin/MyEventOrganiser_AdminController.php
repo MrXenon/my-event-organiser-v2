@@ -1,16 +1,9 @@
 <?php
-
-/**
- * This Admin controller file provide functionality for the Admin section of the 
- * My event organiser.
- * 
- * @author Kevin Schuit
- * @version 0.1
- * 
- * Version history
- * 0.1 Kevin Schuit Initial version
+/* Copyright (C) Kevin Schuit - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
  */
-
  class MyEventOrganiser_AdminController {
 
     static function prepare() {
@@ -26,8 +19,8 @@
                             $page1  =     add_submenu_page ('my-event-organiser-admin',__( 'Dashboard', 'my-event-organiser' ),__( 'Dashboard', 'my-event-organiser'),'manage_options','meo_admin_dashboard', array( 'MyEventOrganiser_AdminController', 'adminSubMenuDashboard') );
                             $page2  =     
                             $page3  =     add_submenu_page ('my-event-organiser-admin',__( 'Event types', 'my-event-organiser' ),__( 'Event Types', 'my-event-organiser'),'manage_options','meo_admin_event_types', array( 'MyEventOrganiser_AdminController', 'adminSubMenuEventTypes') );
-                            $page4  =     add_submenu_page ('my-event-organiser-admin', __( 'Event categorie', 'my-event-organiser' ),__( 'Event categorieën', 'my-event-organiser'),'manage_options','meo_admin_event_category', array( 'MyEventOrganiser_AdminController', 'adminSubMenuEventCategory'));
-                            $page5  =     add_submenu_page ('my-event-organiser-admin',__( 'Apply list', 'my-event-organiser' ),__( 'Event Apply List', 'my-event-organiser'),'manage_options','meo_admin_event_apply_list',array( 'MyEventOrganiser_AdminController', 'adminSubMenuEventApplyList'));
+                            $page4  =     add_submenu_page ('my-event-organiser-admin', __( 'Event categorie', 'my-event-organiser' ),__( 'Event categories', 'my-event-organiser'),'manage_options','meo_admin_event_category', array( 'MyEventOrganiser_AdminController', 'adminSubMenuEventCategory'));
+                            $page5  =     add_submenu_page ('my-event-organiser-admin',__( 'Apply list', 'my-event-organiser' ),__( 'Event Applicants', 'my-event-organiser'),'manage_options','meo_admin_event_apply_list',array( 'MyEventOrganiser_AdminController', 'adminSubMenuEventApplyList'));
 
 
                             // Load the JS conditionally
@@ -62,7 +55,7 @@
                  wp_enqueue_style('bootstrap1', plugin_dir_url(__FILE__).'../bootstrap-5.1.3-dist/css/bootstrap.css');
                  wp_enqueue_style('bootstrap2', plugin_dir_url(__FILE__).'../bootstrap-5.1.3-dist/css/bootstrap-utilities.css');
                  wp_enqueue_style('bootstrap3', plugin_dir_url(__FILE__).'../bootstrap-5.1.3-dist/css/bootstrap-grid.css');
-                 wp_enqueue_style('css', plugin_dir_url(__FILE__).'../css/style.css');
+                 wp_enqueue_style('admin-css', plugin_dir_url(__FILE__).'../css/adminGlobal.css');
                  
              }
             

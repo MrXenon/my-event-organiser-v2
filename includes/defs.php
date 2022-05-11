@@ -1,25 +1,17 @@
 <?php
-
-/**
- * Defenitions needed in the plugin
- * 
- * @author
- * @version 0.1
- * 
- * Version history
- * 0.1      Initial version
+/* Copyright (C) Kevin Schuit - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
  */
-// De versie moet gleijk zij met het versie nummer in de my-event-organiser.php header
 define ( 'MY_EVENT_ORGANISER_VERSION', '0.0.1' );
 
-// Minimum required Wordpress version for this plugin
 define ( 'MY_EVENT_ORGANISER_REQUIRED_WP_VERSION', '5.9.3' );
 
 define ( 'MY_EVENT_ORGANISER_PLUGIN_BASENAME', plugin_basename( MY_EVENT_ORGANISER_PLUGIN ) );
 
 define ( 'MY_EVENT_ORGANISER_PLUGIN_NAME', trim( dirname ( MY_EVENT_ORGANISER_PLUGIN_BASENAME ), '/' ) );
 
-// Folder Structure
 define ( 'MY_EVENT_ORGANISER_PLUGIN_DIR', untrailingslashit( dirname ( MY_EVENT_ORGANISER_PLUGIN ) ) );
 
 define ( 'MY_EVENT_ORGANISER_PLUGIN_INCLUDES_DIR', MY_EVENT_ORGANISER_PLUGIN_DIR . '/includes' );

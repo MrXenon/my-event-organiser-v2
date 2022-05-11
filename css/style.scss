@@ -3,32 +3,9 @@
  * Proprietary and confidential
  * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
  */
-$white: #ffffff;
-$black: #000000;
-.nftIconAdminCheck{
-    width:30px;
-    height: 30px;
-    background-color: green; /* defines the background color of the image */
-    mask: url(../icons/pencil-square.svg) no-repeat center / contain;
-    -webkit-mask: url(../icons/pencil-square.svg) no-repeat center / contain;
-}
-.nftIconAdminX{
-    width:30px;
-    height: 30px;
-    background-color: red; /* defines the background color of the image */
-    mask: url(../icons/x-square-fill.svg) no-repeat center / contain;
-    -webkit-mask: url(../icons/x-square-fill.svg) no-repeat center / contain;
-}
-.nftIconAdminArchive{
-    width:30px;
-    height: 30px;
-    background-color: $black; /* defines the background color of the image */
-    mask: url(../icons/archive-fill.svg) no-repeat center / contain;
-    -webkit-mask: url(../icons/archive-fill.svg) no-repeat center / contain;
-}
-
-.nftIconAdminX:hover,.nftIconAdminArchive:hover,.nftIconAdminCheck:hover
-    {
-        transform:scale(1.2);
-        transition: transform 330ms ease-in-out;
+    .WidthFull{
+        width:100%;
+    }
+    textarea{
+        resize:none;
     }

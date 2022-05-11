@@ -1,41 +1,36 @@
 <?php
-
+/* Copyright (C) Kevin Schuit - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
+ */
 if (function_exists('current_user_can') &&
     !current_user_can('ivs_meo_event_create'))
     die(__('Cheatin&#8217; uh?', 'my_event_organiser'));
 
-// Include the Event class from the model.
 require_once MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . '/Event.php';
 
 $event = new Event();
 
-//Get the list with the event categories
 $event_cat_list = $event->getEventCategoryList();
 $event_type_list = $event->getEventTypeList();
 
-//Set timezone default:
 date_default_timezone_set('Europe/Amsterdam');
 
-/*Include this section */
-
 require_once(MY_EVENT_ORGANISER_PLUGIN_INCLUDES_DIR . '/calendar/classes/tc_calendar.php');
-
 ?>
-<h2><?= __('Evenement aanmaken') ?></h2>
-<p/>
-<h3><?= __('Menu') ?></h3>
+<h2>Evenement aanmaken</h2>
 <form action="<?= $file_base_url; ?>" method="post">
     <table>
         <tr>
             <td><?= __('Titel:'); ?></td>
-            <td><input type="text" name="title" value="<?= $post_inputs['title'] ?>"/></td>
+            <td><input class="WidthFull" type="text" name="title" value="<?= $post_inputs['title'] ?>"/></td>
         </tr>
         <tr>
             <td><?= __('Selecteer evenement categorie:'); ?></td>
-            <td><select name="cat">
+            <td><select name="cat" class="WidthFull">
 
                     <?php
-                    // Create the category drop down
                     foreach ($event_cat_list as $event_cat_obj) {
                         ?>
                         <option value="<?= $event_cat_obj->getId(); ?>"><?php
@@ -47,11 +42,9 @@ require_once(MY_EVENT_ORGANISER_PLUGIN_INCLUDES_DIR . '/calendar/classes/tc_cale
         </tr>
         <tr>
             <td><?= __('Selecteer inschrijvingstype:'); ?></td>
-            <td><select name="type">
+            <td><select name="type" class="WidthFull">
 
                     <?php
-
-                    // Create the category drop down
                     foreach ($event_type_list as $event_type_obj) {
                         ?>
                         <option value="<?= $event_type_obj->getId(); ?>"><?php
@@ -96,8 +89,6 @@ require_once(MY_EVENT_ORGANISER_PLUGIN_INCLUDES_DIR . '/calendar/classes/tc_cale
 
                 ?><span class="error"><?= $form_result->get_error_message('event_date'); ?></span></td>
         </tr>
-
-        <!-- <input type="text" name="event_date" /></td></tr> -->
         <tr>
             <td><?= __('Eind datum: <br />'); ?></td>
             <td>
@@ -122,15 +113,9 @@ require_once(MY_EVENT_ORGANISER_PLUGIN_INCLUDES_DIR . '/calendar/classes/tc_cale
                 $myCalendar->setPath($calendar_dir);
                 $myCalendar->setYearInterval(Date("Y"), intval(Date("Y")) + 10);
                 $myCalendar->dateAllow(Date("Y") . '-01-01', (intval(Date("Y")) + 2) . '-01-01');
-                // Disable some days:
-                //$myCalendar->setSpecificDate(array("2016-04-06", "2016-04-07", "2016-04-10"), 0, 'month');
-                //$myCalendar->setOnChange("myChanged('test')");
                 $myCalendar->writeScript(); ?><span
                         class="error"><?= $form_result->get_error_message('due_date'); ?></span></td>
         </tr>
-
-
-        <!-- <input type="text" name="due_date"/></td></tr> -->
         <tr>
             <td colspan="2">&nbsp;</td>
         </tr>

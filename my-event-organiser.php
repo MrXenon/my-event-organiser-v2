@@ -11,16 +11,7 @@ defined( 'ABSPATH' ) OR exit;
  * Author URI: https://kevinschuit.com
  * Text Domain: my-event-organiser
  * Domain Path: /lang/
- * 
- * This is distributed in hte hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even teh implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
- * GNU General Public License for more details.
- * 
- * You should have received a cpoy of the GNU General Publilc License 
- * along with your plugin. If not, see <http://www.gnu.org/licenses/>.
  */
-
 
  define ( 'MY_EVENT_ORGANISER_PLUGIN', __FILE__ );
 
@@ -39,7 +30,6 @@ defined( 'ABSPATH' ) OR exit;
      public function __construct()
      {
 
-
          do_action('my_event_organiser_pre_init');
 
          add_action('init', array($this, 'init'), 1);
@@ -52,6 +42,7 @@ defined( 'ABSPATH' ) OR exit;
          $plugin = isset( $_REQUEST['plugin'] ) ? $_REQUEST['plugin'] : '';
          check_admin_referer( "activate-plugin_{$plugin}" );
 
+         MyEventOrganiser::requireUserRoleEditor();
          MyEventOrganiser::add_plugin_caps();
          MyEventOrganiser::createDb();
          MyEventOrganiser::create_page();
@@ -69,6 +60,14 @@ defined( 'ABSPATH' ) OR exit;
          MyEventOrganiser::delete_plugin_page();
      }
 
+    public function requireUserRoleEditor(){
+
+        if ( ! is_plugin_active( 'user-role-editor/user-role-editor.php' ) and current_user_can( 'activate_plugins' ) ) {
+
+            wp_die('Sorry, but this plugin requires the user role editor to be installed and active.<br>Install it by clicking <a href="'.admin_url( 'update.php?action=install-plugin&plugin=user-role-editor&_wpnonce=99ac1b6492' ).'">here</a> or <a href="' . admin_url( 'plugins.php' ) . '"> return to plugins</a>');
+        }
+    }
+
      public function init()
      {
         add_filter( 'plugin_row_meta', [$this, 'custom_plugin_row_meta'], 10, 2 );
@@ -81,11 +80,20 @@ defined( 'ABSPATH' ) OR exit;
 
              $this->createAdmin();
              
-
              new MEOPluginUpdater( __FILE__, 'MrXenon', "my-event-organiser-kevin" );
          } else {
 
-             wp_enqueue_script('calendar-script', '/wp-content/plugins/my-event-organiser/includes' . '/calendar/calendar.js');
+             wp_enqueue_script('calendar-script', '/wp-content/plugins/my-event-organiser-v2/includes' . '/calendar/calendar.js');
+             wp_enqueue_style('frontStyle','/wp-content/plugins/my-event-organiser-v2/css' .'/style.css');
+
+             wp_enqueue_script('bootstrap1', plugin_dir_url(__FILE__).'/bootstrap-5.1.3-dist/js/bootstrap.bundle.js');
+             wp_enqueue_script('bootstrap2', plugin_dir_url(__FILE__).'/bootstrap-5.1.3-dist/js/bootstrap.esm.js');
+             wp_enqueue_script('bootstrap3', plugin_dir_url(__FILE__).'/bootstrap-5.1.3-dist/js/bootstrap.js');
+             wp_enqueue_script('bootstrap4', plugin_dir_url(__FILE__).'/bootstrap-5.1.3-dist/jquery/jquery.slim.min.js');
+     
+             wp_enqueue_style('bootstrap1', plugin_dir_url(__FILE__).'/bootstrap-5.1.3-dist/css/bootstrap.css');
+             wp_enqueue_style('bootstrap2', plugin_dir_url(__FILE__).'/bootstrap-5.1.3-dist/css/bootstrap-utilities.css');
+             wp_enqueue_style('bootstrap3', plugin_dir_url(__FILE__).'/bootstrap-5.1.3-dist/css/bootstrap-grid.css');
          }
 
          $this->loadViews();
@@ -288,7 +296,7 @@ defined( 'ABSPATH' ) OR exit;
     {
         global $wpdb;
         $postArray = [
-         "My Event Organiser"
+         "My event organiser"
         ];
 
         foreach ($postArray as $postTitle) {

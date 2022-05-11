@@ -1,26 +1,20 @@
 <?php
+/* Copyright (C) Kevin Schuit - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
+ */
 require_once MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . '/eventClassBuilder.class.php';
 
 class Event
 {
-
-    /**
-     *
-     * @var type EventCategory
-     */
     private $eventBuilder = null;
 
     public function __construct()
     {
-
-        // Init the category and type
         $this->eventBuilder = new eventBuilder();
     }
 
-    /**
-     *
-     * @return type array of EventCategorie
-     */
     public function getEventCategoryList()
     {
         return $this->eventBuilder->getEventCategoryList();
@@ -65,18 +59,6 @@ class Event
         if (!is_string($info)) throw new Exception(__('Tekst invullen'));
     }
 
-    /**
-     *
-     * @global WPDB $wpdb Wordpress database class
-     * @param string $title
-     * @param int $cat -> id
-     * @param int $type -> id
-     * @param string $info
-     * @param date $event_start_date
-     * @param date $event_end_date
-     * @param date $event_due_date
-     * @return boolean
-     */
     function save($title, $cat, $type, $info, $event_start_date,
                   $event_end_date, $event_due_date)
     {
@@ -100,7 +82,7 @@ class Event
         if (count($error->get_error_messages()) < 1) {
 
             $sql = $wpdb->prepare("INSERT INTO `" . $wpdb->prefix . "meo_event`" .
-                "( `event_title`, `fk_eventBuilder`, `fk_eventBuilder`, " .
+                "( `event_title`, `fk_event_category`, `fk_event_type`, " .
                 "`event_info`, `event_date`, `event_due_date`,`event_end_date`)" .
                 " VALUES ( '%s', '%d', '%d', '%s', '%s', " .
                 (strlen($event_due_date) ? "'%s'" : 'null') . ", " . // Could be NULL
@@ -111,19 +93,8 @@ class Event
                 (strlen($event_end_date) ? $event_end_date : 'null' )// Could be NULL
             );
 
-
-            //*
-            // Check your SQL by adding an additional slash before the ‘/*’
-//            echo '<pre>';
-//            echo __FILE__ . __LINE__ . '<br />';
-//            var_dump($sql);
-//            echo '</pre>';
-            //*/
-
             $wpdb->query($sql);
 
-
-            // Error on save ? It's in there:
             if (!empty($wpdb->last_error)) {
                 $this->last_error = $wpdb->last_error;
                 $error->get_error_message($this->last_error);
@@ -132,15 +103,8 @@ class Event
             }
 
         } else {
-
-            // Some WP_ERROR on input vars
-            var_dump($error);
             return $error;
         }
-
-        // Return the last inserted id (Id from the newly created event)
         return $wpdb->insert_id;
     }
 }
-
-?>

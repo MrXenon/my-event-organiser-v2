@@ -1,162 +1,219 @@
 <?php
-//Include model:
+/* Copyright (C) Kevin Schuit - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
+ */
+include MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . "/eventClassBuilder.class.php";
 
-include MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR. "/eventClassBuilder.class.php";
-include MY_EVENT_ORGANISER_PLUGIN_CALENDAR_DIR . "/copyright.php";
+$builder = new eventBuilder();
 
-//Declare class variable:
-$event_categories = new eventBuilder();
-$cp = new Copyright();
-$cc = $cp->check();
+$base_url = get_admin_url() . 'admin.php';
+$params = array('page' => basename(__FILE__, ".php"));
+$page = basename(__FILE__, ".php");
 
-//Set base url to current file and add page specific vars
-$base_url = get_admin_url().'admin.php';
-$params = array( 'page' => basename(__FILE__,".php"));
+$base_url = add_query_arg($params, $base_url);
 
-$page = $params['page'];
 
-//Add params to base url
-$base_url = add_query_arg( $params, $base_url );
+$get_array = $builder->getGetValues();
 
-//Get the GET data in filtered array
-$get_array = $event_categories->getGetValues();
 
-//Keep track of current action
 $action = FALSE;
-
 if (!empty($get_array)) {
 
-    //Check actions
     if (isset($get_array['action'])) {
-        $action = $event_categories->handleGetAction($get_array);
+        $action = $builder->handleGetAction($get_array);
     }
 }
 
-//Get the POST data in filtered array
-$post_array = $event_categories->getPostValues();
 
-//Collect Errors
+$post_array = $builder->getPostValues();
+
+
 $error = FALSE;
 
-//Check the POST data
-if (!empty($post_array)){
+if (!empty($post_array['add'])) {
 
-    //Check the add form:
+
     $add = FALSE;
-    if (isset($post_array['add']) ){
-        // Save event categorie
-        $result = $event_categories->save($post_array);
-        if ($result){
-            //Save was succesfull
-            $add = TRUE;
-        } else {
-            //Indicate error
-            $error = TRUE;
-        }
-    }
 
-    //Check the update form:
-    if (isset($post_array['update']) ){
-        //Save event categorie
-        $event_categories->update($post_array);
+    $result = $builder->save($post_array);
+    if ($result) {
+        $add = TRUE;
+    } else {
+
+        $error = TRUE;
     }
 }
 
+if (!empty($post_array['update'])) {
+
+
+    $update = FALSE;
+
+    $result = $builder->update($post_array);
+    if ($result) {
+
+        $update = TRUE;
+    } else {
+
+        $update = FALSE;
+    }
+}
+
+if (!empty($get_array['action'] == 'delete')) {
+
+    $del = FALSE;
+
+    $result = $builder->delete($post_array);
+    if ($result) {
+
+        $del = TRUE;
+    } else {
+
+        $del = FALSE;
+    }
+}
 ?>
+
 <div class="wrap">
-        Admin event categorie CRUD.<br />
-        (Uitje, excursie, etc)
-<?php
-
-if(isset($add)){
-    echo ($add ? "<p>Added a new event</p>" : "");
-}
-
-    //Check if action == update: then start update form
-    echo (($action == 'update') ? '<form action="'.$base_url.'"method="post">' : '');
-    ?>
-
-    <table class="table table-dark">
-        <caption>Event type categories</caption>
-            <thead>
-                <tr>
-                    <th width="10">Id</th>
-                    <th width="150">Name</th>
-                    <th width="200">Description</th>
-                    <th colspan="2" width="200">Actions</th>
-                </tr>
-            </thead>
+    <section id="minimal-statistics">
+</div>
+<div class="container">
+<h4 class="text-uppercase">Event Categories</h4>
     <?php
-//*
- if( $event_categories->getNrOfEventCategories() < 1){
-?>
- <tr><td colspan="3">Start adding Event Categories</tr>
-<?php 
- } else {
-     $cat_list = $event_categories->getEventCategoryList(); 
+    if (isset($add)) {
+        echo ($add ? "<p class='mt-5 alert alert-success'>" . $_POST['name'] . " has been added.</p>" : "<p class='mt-5 alert alert-danger'>Category could not be added.</p>");
+    }
 
-     //** Show all event categories in the tabel */
-     foreach( $cat_list as $event_cat_obj){
-         
-        //Create update link
-        $params = array( 'action' => 'update', 'id' => $event_cat_obj->getId());
-        //Add params to base url update link
-        $upd_link = add_query_arg( $params,  $base_url );
+    if (isset($update)) {
+        echo ($update ? "<p class='mt-5 alert alert-success'>" . $_POST['name'] . " has been updated.</p>" : "<p class='mt-5 alert alert-danger'>Category could not be updated.</p>");
+    }
 
-        //Create delete link
-        $params = array( 'action' => 'delete', 'id' => $event_cat_obj->getId());
+    if (isset($del)) {
+        echo ($del ? "<p class='mt-5 alert alert-success'>Category has been permanently deleted.</p>" : "<p class='mt-5 alert alert-danger'>Category could not be deleted.</p>");
+    }
 
-        //Add params to base url delete link
-        $del_link = add_query_arg( $params, $base_url);
-
-         ?>
-     <tr><td width="10"><?= $event_cat_obj->getId(); ?></td>
-<?php 
-     //If update and id match show update form
-     //Add hidden field id for id transfer
-     if (   ($action == 'update') && 
-            ($event_cat_obj->getId() == $get_array['id']) ){ 
-?>
-    <td width="180"><input type="hidden" name="id" value="<?= $event_cat_obj->getId(); ?>">
-    <input type="hidden" value="<?=$page;?>" name="p">
-        <input type="text" name="name" value="<?= $event_cat_obj->getName(); ?>"></td>
-    <td width="200"><input type="text" name="description" value ="<?= $event_cat_obj->getDescription();?>"></td>
-    <td colspan="2"><input type="submit" name="update" value="Updaten" <?= $cc; ?>/></td>
-
-    <?php } else {  ?>
-        <td width="180"><?= $event_cat_obj->getName(); ?></td>
-        <td width="200"><?= $event_cat_obj->getDescription();?></td>
-        <?php if ($action !=='update') {
-            //If action is update don't show the action button
+    if ($action !== 'update') {
+    ?>
+    <div class="row mb-5" id="formDiv">
+        <div class="col-md-4">
+            <form class="row g-3 needs-validation" method="post" action="<?= $base_url; ?>" validate>
+                <div class="col-md-12 position-relative">
+                    <input type="hidden" name="p" value="<?= $page; ?>">
+                    <label for="validationCustom01" class="form-label">Name:</label>
+                    <input type="input" class="form-control" maxlength="32" name="name" id="validationCustom01" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                        Please provide a valid type.
+                    </div>
+                    <label for="validationCustom02" class="form-label">Description:</label>
+                    <textarea name="description" rows="10" class="form-control"></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                        Please provide a valid description.
+                    </div>
+                </div>
+                <div class="col-12">
+                    <input type="submit" name="add" class="btn btn-primary" value="Submit">
+                </div>
+            </form>
+        </div>
+        <?php
+    }
+    echo (($action == 'update') ? '<form action="' . $base_url . '" method="post">' : '');
         ?>
-        <td><a href="<?= $upd_link; ?>">Update</a></td>
-        <td><a href="<?= $del_link; ?>">Delete</a></td>
-    <?php
-            } //if action !== update
-    ?>
-    <?php } // if action !== update ?>
-     </tr>
-    <?php   }   }
-    ?>
+            <div class="col-md-8">
+                    <?php
+                    if ($builder->getNrOfEventCategories() < 1) {
+                    ?>
+                        <p class='alert alert-warning text-center'>No event category has been added yet!</p>
+                    <?php } else { 
+                        if($action !== 'update') {
+                        ?>
+                        <table class="table table-dark mt-4" id="networkDiv">
+                        <thead>
+                            <tr>
+                                <th width="400">Category</th>
+                                <th width="2000">Description</th>
+                                <th width="200" colspan="2">Actions</th>
+                            </tr>
+                        </thead>
+                        <?php
+                        }
+                        $colors = $builder->getEventCategoryList();
 
-    </table>
-    <?php
-    echo (($action == 'update') ? '</form>' : '');
-    /** Finally add the new entery line only if no update action  **/
-    if ($action !== 'update'){
-    ?>
+                        foreach ($colors as $builder_obj) {
+                            $params = array('action' => 'update', 'id' => $builder_obj->getId());
+                            $upd_link = add_query_arg($params, $base_url);
 
-    <form action="<?= $base_url; ?>" method="post"><tr>
-        <table>
-            <tr><td colspan="2">
-                    <input type="text" name="name">
-                    <input type="hidden" value="<?=$page;?>" name="p"></td>
-                <td><input type="text" name="description"></td></tr>
-            <tr><td colspan="2"><input type="submit" name="add" <?= $cc; ?> value="Toevoegen"/></td>
-            </tr>
-        </table>
-    </form>
-    <?php
-    } 
-    ?>
+                            $params = array('action' => 'delete', 'id' => $builder_obj->getId(), 'p' => $page);
+                            $del_link = add_query_arg($params, $base_url);
+                        ?>
+
+                            <tr>
+                                <?php
+                                if (($action == 'update') && ($builder_obj->getId() == $get_array['id'])) {
+                                ?>
+                                    <div class="row">
+                                        <div class="col-md-12 position-relative">
+                                            <input type="hidden" name="p" value="<?= $page; ?>">
+                                            <input type="hidden" name="id" value="<?= $builder_obj->getId(); ?>">
+                                            <label for="validationCustom01" class="form-label">Name:</label>
+                                            <input type="input" class="form-control" maxlength="32" name="name" id="validationCustom01" required value="<?= $builder_obj->getName(); ?>">
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Please provide a valid type.
+                                            </div>
+                                            <label for="validationCustom02" class="form-label">Description:</label>
+                                            <textarea name="description" rows="10" class="form-control"><?= $builder_obj->getDescription(); ?></textarea>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Please provide a valid description.
+                                            </div>
+                                        </div>
+                                        <div class="mt-3"></div>
+                                        <div class="col-12">
+                                            <input type="submit" name="update" class="btn btn-success" value="Update">
+                                        </div>
+                                    </div>
+                                <?php } else { 
+                                     if($action !== 'update') {
+                                    ?>
+                                    <td width="400"><?= $builder_obj->getName(); ?></td>
+                                    <td width="2000"><?= $builder_obj->getDescription(); ?></td>
+
+                                    <?php } if ($action !== 'update') {
+                                    ?>
+                                        <td><a href="<?= $upd_link; ?>">
+                                                <div class="nftIconAdminCheck" data-toggle="tooltip" data-placement="bottom" title="Edit"></div>
+                                            </a></td>
+                                        <td><a href="<?= $del_link; ?>" onclick="return confirm('Are you sure you want to permanently delete this network?');">
+                                                <div class="nftIconAdminX" data-toggle="tooltip" data-placement="bottom" title="Delete"></div>
+                                            </a></td>
+                                    <?php
+                                    }
+                                    ?>
+                                <?php }  ?>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                    <?php }
+                    ?>
+                </table>
+            </div>
+    </div>
+        <?php
+        echo (($action == 'update') ? '</form>' : '');
+        ?>
+        </section>
 </div>

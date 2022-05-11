@@ -1,20 +1,18 @@
 <?php
-// Include model:
-include MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . "/EventList.php";
+/* Copyright (C) Kevin Schuit - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
+ */
+require_once MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . "/eventClassBuilder.class.php";
 
-// Declare class variable:
-$event_category = new EventCategory();
-$event_type = new EventType();
-$event = new EventList();
+$event = new eventBuilder();
 
-// Set base url to current file and add page specific vars
 $base_url = get_permalink();
 $params = array('page' => basename(__FILE__, ".php"));
 
-// Add params to base url
 $base_url = add_query_arg($params, $base_url);
 
-// Get the GET data in filtered array
 $get_array = $event->getGetValues();
 
 ?>
@@ -26,14 +24,14 @@ $get_array = $event->getGetValues();
     if ($event->getNrOfEvents() < 1) {
         echo '<p class="alert alert-warning">Er zijn op dit moment geen evenementen beschikbaar.</p>';
     }else{
-        $event_category_list = $event_category->getEventCategoryList();
-        $event_type_list = $event_type->getEventTypeList();
-        $event_list = $event->getEventList();
+        $eventCat_list = $event->getEventCategoryList();
+        $eventType_list = $event->getEventTypeList();
+        $eventList_list = $event->getEventList();
         ?>
 <div class="row">
-    <?php foreach($event_list as $event_obj) {?>
-        <div class="col-3">
-            <div class="card" style="width: 18rem;">
+    <?php foreach($eventList_list as $event_obj) {?>
+        <div class="col-4">
+            <div class="card">
                 <div class="card-body">
                     <h4 class="card-title"><?=$event_obj->getTitle();?></h4>
                     <hr>

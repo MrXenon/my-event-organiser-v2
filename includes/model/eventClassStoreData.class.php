@@ -1,4 +1,9 @@
 <?php
+/* Copyright (C) Kevin Schuit - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
+ */
 require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR. '/eventClassTables.class.php');
 class eventStoreData{
     public function __construct(){
@@ -13,8 +18,8 @@ class eventStoreData{
 
     public function save($input_array){
         try {
-            if($input_array['p'] == 'meo_admin_event_apply_list'){
-                $array_fields = array('gebruiker','titel');
+            if($input_array['p'] == 'event_apply'){
+                $array_fields = array('gebruiker','eventTitel');
             }else{
                 $array_fields = array( 'name', 'description');
             }
@@ -28,10 +33,10 @@ class eventStoreData{
                 $data_array[] = $input_array[$field];
             }
             global $wpdb;
-            if($input_array['p'] == 'meo_admin_event_apply_list'){
+            if($input_array['p'] == 'event_apply'){
 
             $wpdb->query($wpdb->prepare("INSERT INTO `". $this->EventSignupTable()."` ( `event_title`, `event_user`)".
-            " VALUES ( '%s', '%s');",$input_array['titel'],
+            " VALUES ( '%s', '%s');",$input_array['eventTitel'],
             $input_array['gebruiker']) );
             }elseif($input_array['p'] == 'meo_admin_event_category'){
             $wpdb->query($wpdb->prepare("INSERT INTO `". $this->EventCategoryTable()."` ( `name`, `description`)".
@@ -89,11 +94,14 @@ public function update($input_array){
             "WHERE `".$this->EventTypeTable()."`.`id_event_type` =%d;",$input_array['name'],
             $input_array['description'], $input_array['id']) );
         }
+        if ( !empty($wpdb->last_error) ){
+            $this->last_error = $wpdb->last_error;
+            return FALSE;
+        }
     } catch (Exception $exc) {
 
         echo $exc->getTraceAsString();
-        $this->last_error = $exc->getMessage();
-        return FALSE;
+        $this->last_error = $exc->getMessage();   
     }
     return TRUE;
 }
@@ -104,25 +112,27 @@ public function delete($input_array){
         if (!isset($input_array['id']) ) throw new Exception(__("Missing mandatory fields") );
         global $wpdb;
 
-        if($input_array['p'] == 'meo_admin_event_apply_list'){
-        $wpdb->delete( $this->EventSignupTable(),
-            array( 'id' => $input_array['id'] ),
+        if($input_array['p'] == 'meo_admin_event_types'){
+        $wpdb->delete( $this->EventTypeTable(),
+            array( 'id_event_type' => $input_array['id'] ),
             array( '%d' ) );
         }elseif($input_array['p'] == 'meo_admin_event_category'){
             $wpdb->delete( $this->EventCategoryTable(),
             array( 'id_event_category' => $input_array['id'] ),
             array( '%d' ) );
         }else{
-            $wpdb->delete( $this->EventTypeTable(),
-            array( 'id_event_type' => $input_array['id'] ),
+            $wpdb->delete( $this->EventSignupTable(),
+            array( 'id' => $input_array['id'] ),
             array( '%d' ) );
         }
         if ( !empty($wpdb->last_error) ){
             throw new Exception( $wpdb->last_error);
+            return FALSE;
         }
-    } catch (Exception $exc) {
-    }
 
+    } catch (Exception $exc) {
+        
+    }
     return TRUE;
 }
 
@@ -158,6 +168,7 @@ public function delete($input_array){
 
             'action' => array('filter' => FILTER_SANITIZE_STRING ),
 
+            'p' => array('filter' => FILTER_SANITIZE_STRING ),
 
             'id' => array('filter' => FILTER_VALIDATE_INT ));
 
@@ -165,8 +176,6 @@ public function delete($input_array){
         $inputs = filter_input_array( INPUT_GET, $get_check_array );
 
         return $inputs;
-
     }
-
 }
 ?>
