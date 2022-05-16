@@ -5,19 +5,20 @@
  * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
  */
 include MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . "/eventClassBuilder.class.php";
-
+// Definieer de klasse
 $builder = new eventBuilder();
-
+// Definieer de admin url
 $base_url = get_admin_url() . 'admin.php';
 $params = array('page' => basename(__FILE__, ".php"));
+// Wat is onze pagina naam?
 $page = basename(__FILE__, ".php");
-
+// koppel de admin url en pagina naam samen.
 $base_url = add_query_arg($params, $base_url);
 
-
+// haal de URL data op.
 $get_array = $builder->getGetValues();
 
-
+// Check of er een actie is voer de actie functie uit.
 $action = FALSE;
 if (!empty($get_array)) {
 
@@ -26,51 +27,37 @@ if (!empty($get_array)) {
     }
 }
 
-
+// Haal de post waarden op.
 $post_array = $builder->getPostValues();
 
-
+// Check of submit add is verstuurd, zo ja voer de save functie uit.
 $error = FALSE;
-
 if (!empty($post_array['add'])) {
-
-
     $add = FALSE;
-
     $result = $builder->save($post_array);
     if ($result) {
         $add = TRUE;
     } else {
-
         $error = TRUE;
     }
 }
-
+// Check of de update is verstuurd, zo ja voer de update functie uit.
 if (!empty($post_array['update'])) {
-
-
     $update = FALSE;
-
     $result = $builder->update($post_array);
     if ($result) {
-
         $update = TRUE;
     } else {
-
         $update = FALSE;
     }
 }
-
+// Als de actie delete is, dan voeren we de delete functie uit.
 if (!empty($get_array['action'] == 'delete')) {
-
     $del = FALSE;
-
     $result = $builder->delete($post_array);
     if ($result) {
-
         $del = TRUE;
     } else {
-
         $del = FALSE;
     }
 }
@@ -82,6 +69,7 @@ if (!empty($get_array['action'] == 'delete')) {
 <div class="container">
 <h4 class="text-uppercase">Event Categories</h4>
     <?php
+        // Toon ons de berichten op basis van een true of false betreft de save, update en delete.
     if (isset($add)) {
         echo ($add ? "<p class='mt-5 alert alert-success'>" . $_POST['name'] . " has been added.</p>" : "<p class='mt-5 alert alert-danger'>Category could not be added.</p>");
     }
@@ -93,7 +81,7 @@ if (!empty($get_array['action'] == 'delete')) {
     if (isset($del)) {
         echo ($del ? "<p class='mt-5 alert alert-success'>Category has been permanently deleted.</p>" : "<p class='mt-5 alert alert-danger'>Category could not be deleted.</p>");
     }
-
+    // Als de actie niet update is, dan tonen wij het formulier.
     if ($action !== 'update') {
     ?>
     <div class="row mb-5" id="formDiv">
@@ -129,6 +117,7 @@ if (!empty($get_array['action'] == 'delete')) {
         ?>
             <div class="col-md-8">
                     <?php
+                    // als het category aantal kleiner is dan 1, toon ons een warning.
                     if ($builder->getNrOfEventCategories() < 1) {
                     ?>
                         <p class='alert alert-warning text-center'>No event category has been added yet!</p>
@@ -145,9 +134,10 @@ if (!empty($get_array['action'] == 'delete')) {
                         </thead>
                         <?php
                         }
-                        $colors = $builder->getEventCategoryList();
-
-                        foreach ($colors as $builder_obj) {
+                         // koppel de category lijst.
+                        $category = $builder->getEventCategoryList();
+                        // voor elk type, maken wij een nieuw object en laaden wij dit in in onze tabel.
+                        foreach ($ategory as $builder_obj) {
                             $params = array('action' => 'update', 'id' => $builder_obj->getId());
                             $upd_link = add_query_arg($params, $base_url);
 
@@ -157,6 +147,7 @@ if (!empty($get_array['action'] == 'delete')) {
 
                             <tr>
                                 <?php
+                                 // als de actie een update is en een ID heeft, tonen wij het update formulier
                                 if (($action == 'update') && ($builder_obj->getId() == $get_array['id'])) {
                                 ?>
                                     <div class="row">
@@ -186,12 +177,14 @@ if (!empty($get_array['action'] == 'delete')) {
                                         </div>
                                     </div>
                                 <?php } else { 
+                                     // als de actie geen update is, dan tonen wij de tabel waarden.
                                      if($action !== 'update') {
                                     ?>
                                     <td width="400"><?= $builder_obj->getName(); ?></td>
                                     <td width="2000"><?= $builder_obj->getDescription(); ?></td>
-
-                                    <?php } if ($action !== 'update') {
+                                    <?php } 
+                                    if ($action !== 'update') {
+                                        // Als de actie geen update is, dan tonen wij de update en delete knopjes.
                                     ?>
                                         <td><a href="<?= $upd_link; ?>">
                                                 <div class="nftIconAdminCheck" data-toggle="tooltip" data-placement="bottom" title="Edit"></div>
@@ -213,6 +206,7 @@ if (!empty($get_array['action'] == 'delete')) {
             </div>
     </div>
         <?php
+        // sluit het update formulier
         echo (($action == 'update') ? '</form>' : '');
         ?>
         </section>

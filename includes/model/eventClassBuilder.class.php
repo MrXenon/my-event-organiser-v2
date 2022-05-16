@@ -4,6 +4,7 @@
  * Proprietary and confidential
  * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
  */
+// Require alle klasse files
 require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . '/eventClassTables.class.php');
 require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . '/eventClassPostValues.class.php');
 require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . '/eventClassLists.class.php');

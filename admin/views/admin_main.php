@@ -1,8 +1,3 @@
-<div class="wrap">
-    Admin main page
-
-    <?php
-
-    ?>
-
-</div>
+<?php
+// Silence is golden, deze pagina wordt niet gebruikt.
+?>

@@ -10,58 +10,44 @@ class EventView{
 
     private $event;
 
+    // Laad het event
     public function __construct() {
         $this->event = new Event();
     }
 
     public function getGetValues(){
-        //Define the check for params
+        //Definieer de check parameters.
         $get_check_array = array (
-            //Submit action
             'link' => array('filter' => FILTER_SANITIZE_STRING )
         );
-
-        //Get filtered input:
         return filter_input_array( INPUT_GET, $get_check_array );
     }
-
+    // haal de post data op
     public function getPostValues(){
-        // Define the check for params
         $post_check_array = array (
-
-            // Add event form
-            // submit action
             'add_event' => array('filter' => FILTER_SANITIZE_STRING ),
-
-            // Title
             'title' => array('filter' => FILTER_SANITIZE_STRING ),
-
-            // Event Category
             'cat' => array('filter' => FILTER_SANITIZE_NUMBER_INT ),
-            // Event Type
             'type' => array('filter' => FILTER_SANITIZE_NUMBER_INT ),
-
-            // Additional info
             'info' => array('filter' => FILTER_SANITIZE_STRING ),
-
-            // Calendar info
             'event_date' => array('filter' => FILTER_SANITIZE_STRING ),
             'end_date' => array('filter' => FILTER_SANITIZE_STRING ),
             'due_date' => array('filter' => FILTER_SANITIZE_STRING )
         );
-        // Get filtered input:
+        // Filter de input
         $post_inputs = filter_input_array( INPUT_POST, $post_check_array );
 
         return $post_inputs;
     }
 
-
+    // check of het formulier ingestuurd is.
     public function is_submit_event_add_form( $post_inputs ){
         if (!is_null($post_inputs['add_event'])) return TRUE;
 
         return FALSE;
     }
 
+    // check of de waarden ingevoerd zijn
     public function check_event_save_form ( &$post_inputs )
     {
         // Special wordpress error class
@@ -94,17 +80,17 @@ class EventView{
             $errors->add('info', $exc->getMessage());
         }
 
-        // Check all date's
+        // Check dates
         $dates = array( 'event_date',
             'end_date',
             'due_date');
         foreach( $dates as $date_field ){
             try {
-                // End date might be empty
+               // End date kan leeg zijn
                 $date_empty = !($date_field == 'end_date');
                 $this->event->checkDate($post_inputs[$date_field],
                     $date_empty);
-                // If empty date equals 0000-00-00 change to ''
+                // Als date gelijk is aan 0000-00-00 verander naar ''
                 if (!$date_empty && (strcmp($post_inputs[$date_field] ,'0000-00-00') == 0 )){
                     $post_inputs[$date_field] = '';
                 }
@@ -113,9 +99,9 @@ class EventView{
             }
         }
 
-        // Check for errors before saving the date
+        // Check of errors voor het opslaan
         if ($errors->get_error_code()) return $errors;
-        return TRUE; // return the real result
+        return TRUE; // geef resultaat terug.
     }
 
 }

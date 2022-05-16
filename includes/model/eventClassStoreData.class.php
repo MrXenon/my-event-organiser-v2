@@ -4,18 +4,23 @@
  * Proprietary and confidential
  * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
  */
+
+ // Store data klasse
 require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR. '/eventClassTables.class.php');
 class eventStoreData{
+    // Laad de tabellen klasse in
     public function __construct(){
         $this->Tables       = new eventTables();
     }
-
+    // Roep de tabellen aan
     private function TablePrefix(){return $this->Tables->TablePrefix();}
     private function EventTypeTable(){return $this->Tables->EventTypeTable();}
     private function EventCategoryTable(){return $this->Tables->EventCategoryTable();}
     private function EventTable(){return $this->Tables->EventTable();}
     private function EventSignupTable(){return $this->Tables->EventSignupTable();}
 
+    // Save functie voor TYPE, CATEGRORY & APPLY
+    // Zoek de save functie op basis van de pagina naam.
     public function save($input_array){
         try {
             if($input_array['p'] == 'event_apply'){
@@ -59,7 +64,8 @@ class eventStoreData{
     return TRUE;
 }
 
-
+    // Update functie voor TYPE, CATEGRORY & APPLY
+    // Zoek de update functie op basis van de pagina naam.
 public function update($input_array){
     try {
         if($input_array['p'] == 'meo_admin_event_apply_list'){
@@ -106,7 +112,8 @@ public function update($input_array){
     return TRUE;
 }
 
-
+    // Delete functie voor TYPE, CATEGRORY & APPLY
+    // Zoek de delete functie op basis van de pagina naam.
 public function delete($input_array){
     try {
         if (!isset($input_array['id']) ) throw new Exception(__("Missing mandatory fields") );
@@ -136,6 +143,7 @@ public function delete($input_array){
     return TRUE;
 }
 
+    // Koppel de gekozen actie aan een functie.
     public function handleGetAction( $get_array ){
         $action = '';
     
@@ -162,6 +170,7 @@ public function delete($input_array){
         return $action;
     }
 
+    // Haal de link URL values op.
     public function getGetValues(){
 
         $get_check_array = array (

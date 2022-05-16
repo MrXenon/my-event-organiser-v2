@@ -6,16 +6,19 @@
  */
 require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR. '/eventClassTables.class.php');
 class eventLists{
+    // Zet de tabel klasse klaar
     public function __construct(){
         $this->Tables       = new eventTables();
     }
 
+    // Roep de tabellen op.
     private function TablePrefix(){return $this->Tables->TablePrefix();}
     private function EventTypeTable(){return $this->Tables->EventTypeTable();}
     private function EventCategoryTable(){return $this->Tables->EventCategoryTable();}
     private function EventTable(){return $this->Tables->EventTable();}
     private function EventSignupTable(){return $this->Tables->EventSignupTable();}
 
+    // Haal de users op basis van het ID op.
     public function getUsersById($id) {
 
         global $wpdb;
@@ -29,6 +32,7 @@ class eventLists{
         return $user;
     }
     
+    // Haal de titel op basis van het gegeven ID op.
     public function getTitleById($id) {
 
         global $wpdb;
@@ -42,6 +46,7 @@ class eventLists{
         return $title;
     }
 
+    // Haal het aantal typen op.
     public function getNrOfEventTypes(){
         global $wpdb;
 
@@ -51,6 +56,7 @@ class eventLists{
         return $result[0]['nr'];
     }
 
+    // Haal de type lijst op.
     public function getEventTypeList(){
 
         global $wpdb;
@@ -71,6 +77,7 @@ class eventLists{
         return $return_array;
     }
 
+    // Haal de categorie op basis van het ID op.
     public function getCategoryById($id) {
 
         global $wpdb;
@@ -84,6 +91,7 @@ class eventLists{
         return $category;
     }
 
+    // Haal het type op basis van het ID op.
     public function getTypeById($id) {
 
         global $wpdb;
@@ -96,6 +104,7 @@ class eventLists{
         return $type;
     }
 
+    // Haal het aantal evenementen op.
     public function getNrOfEvents(){
         global $wpdb;
 
@@ -105,6 +114,7 @@ class eventLists{
         return $result[0] ['nr'];
     }
 
+    // Haal het aantal inschrijvingen op.
     public function getNrOfInschrijvingen(){
         global $wpdb;
 
@@ -114,6 +124,7 @@ class eventLists{
         return $result[0] ['nr'];
     }
 
+    // Haal de evenementen lijst op.
     public function getEventList() {
 
         global $wpdb;
@@ -138,6 +149,7 @@ class eventLists{
         return $return_array;
     }
 
+    // Haal de signup lijst op.
     public function getSignupList() {
 
         global $wpdb;
@@ -156,6 +168,7 @@ class eventLists{
         return $return_array;
     }
 
+    // Haal het aantal evenement categorieën op.
     public function getNrOfEventCategories(){
         global $wpdb;
 
@@ -165,6 +178,7 @@ class eventLists{
         return $result[0] ['nr'];
     }
 
+    // Haal de categorie lijst op
     public function getEventCategoryList() {
 
         global $wpdb;

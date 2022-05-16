@@ -4,16 +4,20 @@
  * Proprietary and confidential
  * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
  */
+
+// plug-in definities
+//Plug-in versie/
 define ( 'MY_EVENT_ORGANISER_VERSION', '0.0.1' );
-
+// Wordpress versie
 define ( 'MY_EVENT_ORGANISER_REQUIRED_WP_VERSION', '5.9.3' );
-
+// plug-in basename
 define ( 'MY_EVENT_ORGANISER_PLUGIN_BASENAME', plugin_basename( MY_EVENT_ORGANISER_PLUGIN ) );
-
+/// plug-in name
 define ( 'MY_EVENT_ORGANISER_PLUGIN_NAME', trim( dirname ( MY_EVENT_ORGANISER_PLUGIN_BASENAME ), '/' ) );
-
+// plug-in directory
 define ( 'MY_EVENT_ORGANISER_PLUGIN_DIR', untrailingslashit( dirname ( MY_EVENT_ORGANISER_PLUGIN ) ) );
 
+// plug-in mappen structuur
 define ( 'MY_EVENT_ORGANISER_PLUGIN_INCLUDES_DIR', MY_EVENT_ORGANISER_PLUGIN_DIR . '/includes' );
 
 define ( 'MY_EVENT_ORGANISER_PLUGIN_CSS_DIR', MY_EVENT_ORGANISER_PLUGIN_DIR . '/css' );

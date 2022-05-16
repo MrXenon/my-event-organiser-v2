@@ -5,35 +5,37 @@
  * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
  */
 include_once MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . "/eventClassBuilder.class.php";
-
+// definieer de klasse.
 $event = new eventBuilder();
 
+// haal de permalink en pagina naam op onder link.
 $base_url = get_permalink();
 $params = array('link' => basename(__FILE__, ".php"));
+// Haal de pagina naam op
 $page = basename(__FILE__, ".php");
 
+// koppel de bovenstaande waarden in de base url.
 $base_url = add_query_arg($params, $base_url);
 
+// Haal de URL waarden op
 $get_array = $event->getGetValues();
 
+// Check of er een actie is voer de actie functie uit.
 $action = FALSE;
 if (!empty($get_array)) {
-
     if (isset($get_array['action'])) {
         $action = $event->handleGetAction($get_array);
     }
 }
-
+// Haal de post waarden op
 $post_array = $event->getPostValues();
-
+// Voeg de data toe in ons save formulier, wanneer een post waarde add is.
 $error = FALSE;
-
 if (!empty($post_array['add'])) {
-
     $add = FALSE;
-
     $result = $event->save($post_array);
     if ($result) {
+        // herleid de pagina naar de base url bij succes.
         ?>
         <script>
          window.location.replace("<?=$base_url;?>");
@@ -48,15 +50,19 @@ if (!empty($post_array['add'])) {
 <div class="wrap">
 <h2>Inschrijven op Evenement</h2>
     <?php 
+    // Check of event aantal kleiner is dan 1
     if ($event->getNrOfEvents() < 1) {
         echo '<p class="alert alert-warning">Er zijn op dit moment geen evenementen beschikbaar.</p>';
     }else{
+        // Haal de lijsten op
         $eventCat_list = $event->getEventCategoryList();
         $eventType_list = $event->getEventTypeList();
         $eventList_list = $event->getEventList();
         ?>
 <div class="row">
-    <?php foreach($eventList_list as $event_obj) {?>
+    <?php 
+    // Bouw de evenementen lijst visueel op.
+    foreach($eventList_list as $event_obj) {?>
         <div class="col-3">
             <div class="card" style="width: 18rem;">
                 <div class="card-body">

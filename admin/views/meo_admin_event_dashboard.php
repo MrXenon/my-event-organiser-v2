@@ -6,12 +6,15 @@
  */
 include MY_EVENT_ORGANISER_PLUGIN_MODEL_SRC_DIR . "/classBuilder.class.php";
 
+// Definieer de klasse.
 $builder = new classBuilder();
 
+// Definieer de admin url.
 $base_url = get_admin_url() . 'admin.php';
 $params = array('page' => basename(__FILE__, ".php"));
 $base_url = add_query_arg($params, $base_url);
 
+// Definieer de lijsten voor het dashboard.
 $Shortcodes =   $builder->getKSShortcodes();
 $Author     =   $builder->getKSAuthor();
 $updateLog  =   $builder->getKSUpdateLog();

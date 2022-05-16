@@ -6,13 +6,17 @@
  */
 require_once MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . "/eventClassBuilder.class.php";
 
+// Definieer de klasse
 $event = new eventBuilder();
 
+// Maak de pagina url aan
 $base_url = get_permalink();
 $params = array('page' => basename(__FILE__, ".php"));
 
+// Koppel de pagina url data
 $base_url = add_query_arg($params, $base_url);
 
+// Haal de URL waarden op
 $get_array = $event->getGetValues();
 
 ?>
@@ -21,15 +25,19 @@ $get_array = $event->getGetValues();
 <div class="wrap">
 <h2>Evenementen lijst</h2>
     <?php 
+    // Check of event aantal kleiner is dan 1
     if ($event->getNrOfEvents() < 1) {
         echo '<p class="alert alert-warning">Er zijn op dit moment geen evenementen beschikbaar.</p>';
     }else{
+        // Haal de lijsten op
         $eventCat_list = $event->getEventCategoryList();
         $eventType_list = $event->getEventTypeList();
         $eventList_list = $event->getEventList();
         ?>
 <div class="row">
-    <?php foreach($eventList_list as $event_obj) {?>
+    <?php 
+    // Bouw de evenementen lijst visueel op.
+    foreach($eventList_list as $event_obj) {?>
         <div class="col-4">
             <div class="card">
                 <div class="card-body">

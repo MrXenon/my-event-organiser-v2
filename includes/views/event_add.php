@@ -4,20 +4,22 @@
  * Proprietary and confidential
  * Written by Kevin Schuit <info@kevinschuit.com>, April 2022
  */
+// check of de gebruiker rechten heeft om deze pagina te zien.
 if (function_exists('current_user_can') &&
     !current_user_can('ivs_meo_event_create'))
     die(__('Cheatin&#8217; uh?', 'my_event_organiser'));
 
 require_once MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . '/Event.php';
-
+// definieer de klasse
 $event = new Event();
-
+// koppel de lijsten.
 $event_cat_list = $event->getEventCategoryList();
 $event_type_list = $event->getEventTypeList();
-
+// definieer de tijd zone
 date_default_timezone_set('Europe/Amsterdam');
-
+// definieer de kalender klasse
 require_once(MY_EVENT_ORGANISER_PLUGIN_INCLUDES_DIR . '/calendar/classes/tc_calendar.php');
+// bouw het formulier
 ?>
 <h2>Evenement aanmaken</h2>
 <form action="<?= $file_base_url; ?>" method="post">
@@ -58,6 +60,7 @@ require_once(MY_EVENT_ORGANISER_PLUGIN_INCLUDES_DIR . '/calendar/classes/tc_cale
             <td><?= __('Evenement datum:<br />'); ?></td>
             <td>
                 <?php
+                // definieer de kalender map.
                 $calendar_dir = site_url() . "/wp-content/plugins/my-event-organiser/includes/calendar/";
 
                 $event_date_default = is_null($post_inputs['event_date']) ? Date("Y-m-d") : $post_inputs['event_date'];

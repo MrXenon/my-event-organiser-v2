@@ -6,14 +6,16 @@
  */
  class MyEventOrganiser_AdminController {
 
+    // prepareer het admin menu
     static function prepare() {
-        
+        // zijn wij een administrator?
         if ( is_admin() ) :
 
             add_action( 'admin_menu', array( 'MyEventOrganiser_AdminController', 'addMenus' ) );
 
         endif;
     }
+                // Maak het menu aan en voeg de bootstrap scripts toe.
                 static function addMenus() {
                             $page0  =     add_menu_page( __( 'My Event Organiser Admin', 'my-event-organiser'), __( 'My Event Organiser', 'my-event-organiser' ),'','my-event-organiser-admin',array( 'MyEventOrganiser_AdminController', 'adminMenuPage'),'https://www.kevinschuit.com/images/20x20logoWit.png','3'); 
                             $page1  =     add_submenu_page ('my-event-organiser-admin',__( 'Dashboard', 'my-event-organiser' ),__( 'Dashboard', 'my-event-organiser'),'manage_options','meo_admin_dashboard', array( 'MyEventOrganiser_AdminController', 'adminSubMenuDashboard') );
@@ -34,19 +36,17 @@
                 }
 
 
-             // This function is only called when our plugin's page loads!
+             // Als de plug-in pagina laad, roep deze functie aan.
             static function load_admin_js(){
-                 // Unfortunately we can't just enqueue our scripts here - it's too early. So register against the proper action hook to do it
                  add_action( 'admin_enqueue_scripts',array('MyEventOrganiser_AdminController','enqueue_admin_js') );
              }
 
              static function load_admin_app_js(){
-                // Unfortunately we can't just enqueue our scripts here - it's too early. So register against the proper action hook to do it
                 add_action( 'admin_enqueue_scripts',array('MyEventOrganiser_AdminController','enqueue_admin_bs_app') );
             }
          
+            // Voeg de scripts toe die je in wil laden.
             static function enqueue_admin_js(){
-                 // Isn't it nice to use dependencies and the already registered core js files?
                  wp_enqueue_script('bootstrap1', plugin_dir_url(__FILE__).'../bootstrap-5.1.3-dist/js/bootstrap.bundle.js');
                  wp_enqueue_script('bootstrap2', plugin_dir_url(__FILE__).'../bootstrap-5.1.3-dist/js/bootstrap.esm.js');
                  wp_enqueue_script('bootstrap3', plugin_dir_url(__FILE__).'../bootstrap-5.1.3-dist/js/bootstrap.js');
@@ -68,6 +68,7 @@
                 wp_enqueue_style('gfonts', 'https://fonts.googleapis.com/css?family=Montserrat&display=swap');
              }
 
+            // Laad de menu pagina bestanden.
             static function adminMenuPage() {
                 include MY_EVENT_ORGANISER_PLUGIN_ADMIN_VIEWS_DIR . '/admin_main.php';
             }
@@ -87,10 +88,6 @@
 
             static function adminSubMenuDashboard(){
                 include MY_EVENT_ORGANISER_PLUGIN_ADMIN_VIEWS_DIR . '/meo_admin_event_dashboard.php';
-            }
-            static function adminSubMenuEventChangelog()
-            {
-                include MY_EVENT_ORGANISER_PLUGIN_ADMIN_VIEWS_DIR . '/changelog.php';
             }
     }
 ?>

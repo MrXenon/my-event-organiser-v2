@@ -6,27 +6,28 @@ defined( 'ABSPATH' ) OR exit;
  * Plugin Name: My event organisator plugin
  * Plugin URI: <>
  * Description: My Event Organiser, de tutorial plug-in die ontwikkeld is om studenten te leren hoe zij het beste een plug-in kunnen ontwikkelen, met daarin de core features die bij het plug-in ontwikkelen langs komen.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Kevin Schuit
  * Author URI: https://kevinschuit.com
  * Text Domain: my-event-organiser
  * Domain Path: /lang/
  */
+    // Definieer de plug-in file naam.
+     define ( 'MY_EVENT_ORGANISER_PLUGIN', __FILE__ );
+    // laad de definitie file.
+    require_once plugin_dir_path ( __FILE__ ) . 'includes/defs.php';
+    // Laad de insertie klasse.
+     require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_SRC_DIR.'/classInsertion.class.php');
+    // Laad de updater klasse.
+    require_once ( 'MEOPluginUpdater.php' );
 
- define ( 'MY_EVENT_ORGANISER_PLUGIN', __FILE__ );
-
- require_once plugin_dir_path ( __FILE__ ) . 'includes/defs.php';
-
- require_once (MY_EVENT_ORGANISER_PLUGIN_MODEL_SRC_DIR.'/classInsertion.class.php');
-
- require_once ( 'MEOPluginUpdater.php' );
-
-
+    // Hooks
     register_activation_hook( __FILE__, array( 'MyEventOrganiser', 'on_activation' ) );
     register_deactivation_hook( __FILE__, array( 'MyEventOrganiser', 'on_deactivation' ) );
  
  class MyEventOrganiser
  {
+     // Tijdens de installatie, initialiseer de admin en benodigdheden.
      public function __construct()
      {
 
@@ -35,6 +36,7 @@ defined( 'ABSPATH' ) OR exit;
          add_action('init', array($this, 'init'), 1);
      }
 
+     // Voer deze functies uit tijdens activatie/
      public static function on_activation()
      {
          if ( ! current_user_can( 'activate_plugins' ) )
@@ -48,6 +50,7 @@ defined( 'ABSPATH' ) OR exit;
          MyEventOrganiser::create_page();
          Insertion::buildSourceTables();
      }
+     // Voer deze functies uit tijdens deactivatie.
      public static function on_deactivation()
      {
          if ( ! current_user_can( 'activate_plugins' ) )
@@ -60,6 +63,7 @@ defined( 'ABSPATH' ) OR exit;
          MyEventOrganiser::delete_plugin_page();
      }
 
+     // Check of de user role editor al actief is en geïnstalleerd, zo niet, toon ons de download link.
     public function requireUserRoleEditor(){
 
         if ( ! is_plugin_active( 'user-role-editor/user-role-editor.php' ) and current_user_can( 'activate_plugins' ) ) {
@@ -69,21 +73,27 @@ defined( 'ABSPATH' ) OR exit;
        }
     }
 
+    // Initialisatie functie.
      public function init()
      {
+         // geef positiee van de eigen meta aan op de plug-in.
         add_filter( 'plugin_row_meta', [$this, 'custom_plugin_row_meta'], 10, 2 );
 
+        // initialiseer d my event organiser
          do_action('my_event_organiser_init');
 
          if (is_admin()) {
 
+            // Voeg de admin controller file toe.
              $this->requireAdmin();
 
+             // Maak de admin controller aan.
              $this->createAdmin();
-             
+             // roep de updater aan.
              new MEOPluginUpdater( __FILE__, 'MrXenon', "my-event-organiser-kevin" );
          } else {
 
+            // Voeg scripts toe aan het front-end.
              wp_enqueue_script('calendar-script', '/wp-content/plugins/my-event-organiser-v2/includes' . '/calendar/calendar.js');
              wp_enqueue_style('frontStyle','/wp-content/plugins/my-event-organiser-v2/css' .'/style.css');
 
@@ -100,8 +110,10 @@ defined( 'ABSPATH' ) OR exit;
          $this->loadViews();
      }
 
+     // Maak eigen meta aan en voeg deze toe aan de plug-in.
      public function custom_plugin_row_meta( $links, $file ) 
     {
+        // check of de plug-in file naam overeen komt met die van de huidige plug-in.
         if ( strpos( $file, 'my-event-organiser.php' ) !== false ) {
 	    $new_links = array(
             '<a href="http://gzwv.kevinschuit.com" target="_blank">Bekijk tutorial</a>',
@@ -115,21 +127,25 @@ defined( 'ABSPATH' ) OR exit;
 	return $links;
     }
 
+    // definieer de admin controller.
      public function requireAdmin()
      {
 
          require_once MY_EVENT_ORGANISER_PLUGIN_ADMIN_DIR . '/MyEventOrganiser_AdminController.php';
      }
 
+     // prepareer de admin controller en bouw de pagina links.
      public function createAdmin()
      {
          MyEventOrganiser_AdminController::prepare();
      }
+     // Laad de shortcode pagina
      public function loadViews()
      {
          include MY_EVENT_ORGANISER_PLUGIN_INCLUDES_VIEWS_DIR . '/view_shortcodes.php';
      }
 
+     // definieer de plugin rollen in de user role editor.
      public static function get_plugin_roles_and_caps(){
 
 
@@ -156,6 +172,7 @@ defined( 'ABSPATH' ) OR exit;
 
      }
 
+     // Voeg de plugin capabillities toe van de user role editor
      public static function add_plugin_caps() {
 
 
@@ -186,6 +203,7 @@ defined( 'ABSPATH' ) OR exit;
          }
      }
 
+     // verwijder de plugin capabllities van user role editor
      public static function remove_plugin_caps(){
 
          require_once plugin_dir_path( __FILE__ ) .
@@ -204,16 +222,14 @@ defined( 'ABSPATH' ) OR exit;
          }
      }
 
+     // maak de database aan
      public static function createDb()
      {
-
          require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
-
          global $wpdb;
 
          $charset_collate = $wpdb->get_charset_collate();
-
+        // definieer de tabellen
          $event         =    $wpdb->prefix . "meo_event";
          $category      =    $wpdb->prefix . "meo_event_category";
          $types         =    $wpdb->prefix . "meo_event_type";
@@ -257,27 +273,30 @@ defined( 'ABSPATH' ) OR exit;
          dbDelta($sql);
      }
 
+     // Verwijder de plugin tabellen
      public static function delete_plugin_database_tables()
     {
         global $wpdb;
+        // tabel array
         $tableArray = [
             $wpdb->prefix . "meo_event",
             $wpdb->prefix . "meo_event_category",
             $wpdb->prefix . "meo_event_type",
             $wpdb->prefix . "meo_event_signup"
         ];
-
+        // Drop de tabellen voor elke naam in de array
         foreach ($tableArray as $tablename) {
             $wpdb->query("DROP TABLE IF EXISTS $tablename");
         }
     }
-
+    // Maak de plugin front-end pagina aan
     public static function create_page()
     {
+        // check of de gebruiker plugins kan activeren.
         if (!current_user_can('activate_plugins')) return;
 
         global $wpdb;
-
+        // als de pagina nog niet bestaat, run de query en maak deze aan.
         if (null === $wpdb->get_row("SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = 'my-event-organiser'", 'ARRAY_A')) {
 
             $current_user = wp_get_current_user();
@@ -292,20 +311,21 @@ defined( 'ABSPATH' ) OR exit;
             wp_insert_post($page);
         }
     }
-
+    // Verwijder de plug-in pagina 'My Event Organiser'
     public static function delete_plugin_page()
     {
         global $wpdb;
+        // pagina array
         $postArray = [
          "My event organiser"
         ];
-
+        // Verwijder elke pagina in de array
         foreach ($postArray as $postTitle) {
             $wpdb->query("DELETE FROM `".$wpdb->prefix. "posts` WHERE post_title = '$postTitle'");
         }
     }
 
  }
-
+// Roep de plug-in aan
  $event_organiser = new MyEventOrganiser();
  ?>

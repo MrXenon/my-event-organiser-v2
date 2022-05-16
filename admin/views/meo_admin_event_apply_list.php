@@ -6,43 +6,38 @@
  */
 include MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . "/eventClassBuilder.class.php";
 
-
+// Definieer de klasse
 $event_list = new eventBuilder();
 
-
+// Definieer de admin url
 $base_url = get_admin_url() . 'admin.php';
 $params = array('page' => basename(__FILE__, ".php"));
-
+// Wat is onze pagina naam?
 $page = $params['page'];
 
-
+// koppel de admin url en pagina naam samen.
 $base_url = add_query_arg($params, $base_url);
 
-
+// haal de URL data op.
 $get_array = $event_list->getGetValues();
 
-
+// Check of er een actie is voer de actie functie uit.
 $action = FALSE;
 if (!empty($get_array)) {
-
-
     if (isset($get_array['action'])) {
         $action = $event_list->handleGetAction($get_array);
     }
 }
-
+// Haal de post waarden op.
 $post_array = $event_list->getPostValues();
 
+// Als de actie delete is, dan voeren we de delete functie uit.
 if (!empty($get_array['action'] == 'delete')) {
-
     $del = FALSE;
-
     $result = $event_list->delete($post_array);
     if ($result) {
-
         $del = TRUE;
     } else {
-
         $del = FALSE;
     }
 }
@@ -59,7 +54,7 @@ if (!empty($get_array['action'] == 'delete')) {
     ?>
 
     <?php
-
+    // als het inschrijvngen aantal kleiner is dan 1, toon ons een warning.
     if ($event_list->getNrOfInschrijvingen() < 1) {
         echo "<p class='alert alert-warning text-center'>There are currently no registered applicants.</p>";
     ?>
@@ -82,9 +77,10 @@ if (!empty($get_array['action'] == 'delete')) {
                 </tr>
             </thead>
             <?php
+            // koppel de app lijst.
             $app_list = $event_list->getSignupList();
 
-
+            // voor elk type, maken wij een nieuw object en laaden wij dit in in onze tabel.
             foreach ($app_list as $app_list_obj) {
 
 
@@ -94,7 +90,7 @@ if (!empty($get_array['action'] == 'delete')) {
             ?>
                 <tr>
                     <?php
-
+                    // als de actie een update is en een ID heeft, tonen wij het update formulier
                     if (($action == 'update') && ($app_list_obj->getApplyId() == $get_array['id'])) {
                     ?>
                     <?php } else { ?>
@@ -112,8 +108,10 @@ if (!empty($get_array['action'] == 'delete')) {
                                             echo ($app_list_obj->getUsersById($id));
                                         }
                                         ?></td>
-                        <?php if ($action !== 'update') {
-                            
+                        <?php 
+                        // als de actie geen update is, dan tonen wij de tabel waarden.
+                        if ($action !== 'update') {
+                            // Als de actie geen update is, dan tonen wij de update en delete knopjes.
                         ?>
                             <td><a href="<?= $del_link; ?>"><div class="nftIconAdminX" data-toggle="tooltip" data-placement="bottom" title="Delete"></div></a></td>
                         <?php
@@ -129,7 +127,7 @@ if (!empty($get_array['action'] == 'delete')) {
         ?>
         </table>
         <?php
-
+        // sluit het update formulier
         echo (($action == 'update') ? '</form>' : '');
 
         ?>

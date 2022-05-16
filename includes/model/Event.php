@@ -8,44 +8,47 @@ require_once MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR . '/eventClassBuilder.class.php
 
 class Event
 {
+    // instantieert de eventBuilder klasse
     private $eventBuilder = null;
 
+    // Laat de eventBuilder klasse in
     public function __construct()
     {
         $this->eventBuilder = new eventBuilder();
     }
 
+    // Haal de category lijst op.
     public function getEventCategoryList()
     {
         return $this->eventBuilder->getEventCategoryList();
     }
-
+    // Haal de type lijst op
     public function getEventTypeList()
     {
         return $this->eventBuilder->getEventTypeList();
     }
-
+    // Check value, anders toon ons een exceptie.
     public function checkEventTitle($title)
     {
         if (!is_string($title)) throw new Exception (__('Tekst invullen'));
 
         if (empty($title)) throw new Exception (__('Verplicht veld!'));
     }
-
+    // Check value, anders toon ons een exceptie.
     public function checkCat($cat)
     {
         if (!is_numeric($cat)) throw new Exception (__('Categorie link incorrect'));
 
         if (strlen($cat) < 1) throw new Exception (__('Verplicht veld!'));
     }
-
+    // Check value, anders toon ons een exceptie.
     public function checkType($type)
     {
         if (!is_numeric($type)) throw new Exception (__('Type link incorrect'));
 
         if (strlen($type) < 1) throw new Exception (__('Verplicht veld!'));
     }
-
+    // Check value, anders toon ons een exceptie.
     public function checkDate($date, $empty = FALSE)
     {
         if (!$empty && strlen($date) < 1) throw new Exception (__('Verplicht veld'));
@@ -53,12 +56,12 @@ class Event
         if (!is_string($date)) throw new Exception (__('Datum tekst formaat yyyy-mm-dd'));
         //@todo check date format
     }
-
+    // Check value, anders toon ons een exceptie.
     public function checkInfo($info)
     {
         if (!is_string($info)) throw new Exception(__('Tekst invullen'));
     }
-
+    // Start de save functie
     function save($title, $cat, $type, $info, $event_start_date,
                   $event_end_date, $event_due_date)
     {
@@ -78,7 +81,7 @@ class Event
             $error->add('save', $exc->getMessage());
         }
 
-        // Check on found errors if none save data
+        // check op errors, zijn er geen, dan slaan we de data op.
         if (count($error->get_error_messages()) < 1) {
 
             $sql = $wpdb->prepare("INSERT INTO `" . $wpdb->prefix . "meo_event`" .
@@ -93,8 +96,10 @@ class Event
                 (strlen($event_end_date) ? $event_end_date : 'null' )// Could be NULL
             );
 
+            // Voer de SQL uit
             $wpdb->query($sql);
 
+            // Is er een error? Toon ons de laatste error.
             if (!empty($wpdb->last_error)) {
                 $this->last_error = $wpdb->last_error;
                 $error->get_error_message($this->last_error);
