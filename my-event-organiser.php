@@ -63,9 +63,10 @@ defined( 'ABSPATH' ) OR exit;
     public function requireUserRoleEditor(){
 
         if ( ! is_plugin_active( 'user-role-editor/user-role-editor.php' ) and current_user_can( 'activate_plugins' ) ) {
-
-            wp_die('Sorry, but this plugin requires the user role editor to be installed and active.<br>Install it by clicking <a href="'.admin_url( 'update.php?action=install-plugin&plugin=user-role-editor&_wpnonce=99ac1b6492' ).'">here</a> or <a href="' . admin_url( 'plugins.php' ) . '"> return to plugins</a>');
-        }
+            $plugin_name = 'user-role-editor';
+            $install_link = 'The following plug-in is required in order to run this plug-in <a href="' . esc_url( network_admin_url('plugin-install.php?tab=plugin-information&plugin=' . $plugin_name . '&TB_iframe=true&width=600&height=550' ) ) . '" class="thickbox" title="More info about ' . $plugin_name . '">Install ' . $plugin_name . '</a>';
+            wp_die($install_link);
+       }
     }
 
      public function init()
