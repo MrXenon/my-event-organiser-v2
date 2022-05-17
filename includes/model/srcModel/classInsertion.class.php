@@ -105,7 +105,39 @@ class Insertion{
                <li>On plug-in deactivation delete our database plug-in tables & remove our plug-in front-end page.</li>
                <li>Plug-in displays tutorial site, support button & Dashboard button on plug-in page.</li>
                <li>Current code is based on PHP 7.4 & 8.0, certain functions will be deprecated in 8.1, due to this the newer functions are added in comments near the current code.</li>', 
-               'Next update includes a new calendar or a reworked version of the current one as the current version breaks with updated javascript');";
+               'Next update includes a new calendar or a reworked version of the current one as the current version breaks with updated javascript'),
+               
+               (2, 'V1.0.1','Base version of the my Event Organiser, current version is based on PHP 7.4 & PHP 8.0 for Wordpress 5.9.3.',
+               '<li>Added a dashboard.</li>
+               <li>Imported the shortcode.</li>
+               <li>Inserted dashboard builder.</li>
+               <li>Reworked the event class files to stack similar functions.</li>
+               <li>Added wordpress plugin update by Github repository version.</li>
+               <li>Inserted stylesheet through SCSS.</li>
+               <li>Split admin only bootstrap & front-end file bootstrap.</li>
+               <li>Included bootstrap in front-end MEO plug-in.</li>
+               <li>Updated event_list.php</li>
+               <li>Updated event_apply.php</li>
+               <li>Updated event_add.php</li>
+               <li>Updated meo_admin_event_apply_list.php</li>
+               <li>Updated meo_admin_event_category.php</li>
+               <li>Updated meo_admin_event_types.php</li>
+               <li>loaded icons folder in plug-in.</li>
+               <li>Require user role editor plug-in, else add option to return or install the plug-in on click.</li>
+               <li>Reverted MEO aspects back to original dataset.</li>
+               <li>Added a button to the my event organiser page in the dashboard.</li>
+               <li>On plug-in activation, create the My Event Organiser front-end page & add our shortcode to it.</li>
+               <li>On plug-in deactivation delete our database plug-in tables & remove our plug-in front-end page.</li>
+               <li>Plug-in displays tutorial site, support button & Dashboard button on plug-in page.</li>
+               <li>Current code is based on PHP 7.4 & 8.0, certain functions will be deprecated in 8.1, due to this the newer functions are added in comments near the current code.</li>', 
+               'Next update includes a new calendar or a reworked version of the current one as the current version breaks with updated javascript'),
+
+
+               (3, 'V1.0.2','Fixed calendar script and inserted the plugin base name in the view calendar link.',
+               '<li>Fixed calendar script</li>
+               <li>Added plug-in base name to calendar link</li>
+               <li>Commented all the MEO code</li>', 
+               'Might include some new functions.');";
 
            dbDelta($sql);
     }

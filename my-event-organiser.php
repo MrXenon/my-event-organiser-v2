@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) OR exit;
  * Plugin Name: My event organisator plugin
  * Plugin URI: <>
  * Description: My Event Organiser, de tutorial plug-in die ontwikkeld is om studenten te leren hoe zij het beste een plug-in kunnen ontwikkelen, met daarin de core features die bij het plug-in ontwikkelen langs komen.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Kevin Schuit
  * Author URI: https://kevinschuit.com
  * Text Domain: my-event-organiser

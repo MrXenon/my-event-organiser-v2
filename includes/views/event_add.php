@@ -61,7 +61,7 @@ require_once(MY_EVENT_ORGANISER_PLUGIN_INCLUDES_DIR . '/calendar/classes/tc_cale
             <td>
                 <?php
                 // definieer de kalender map.
-                $calendar_dir = site_url() . "/wp-content/plugins/my-event-organiser/includes/calendar/";
+                $calendar_dir = site_url() . "/wp-content/plugins/".MY_EVENT_ORGANISER_PLUGIN_NAME."/includes/calendar/";
 
                 $event_date_default = is_null($post_inputs['event_date']) ? Date("Y-m-d") : $post_inputs['event_date'];
                 $end_date_default = is_null($post_inputs['end_date']) ? '' :

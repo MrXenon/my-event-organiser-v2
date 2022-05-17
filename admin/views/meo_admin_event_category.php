@@ -137,7 +137,7 @@ if (!empty($get_array['action'] == 'delete')) {
                          // koppel de category lijst.
                         $category = $builder->getEventCategoryList();
                         // voor elk type, maken wij een nieuw object en laaden wij dit in in onze tabel.
-                        foreach ($ategory as $builder_obj) {
+                        foreach ($category as $builder_obj) {
                             $params = array('action' => 'update', 'id' => $builder_obj->getId());
                             $upd_link = add_query_arg($params, $base_url);
 

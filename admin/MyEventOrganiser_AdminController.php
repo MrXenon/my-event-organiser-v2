@@ -11,12 +11,12 @@
         // zijn wij een administrator?
         if ( is_admin() ) :
 
-            add_action( 'admin_menu', array( 'MyEventOrganiser_AdminController', 'addMenus' ) );
+            add_action( 'admin_menu', array( 'MyEventOrganiser_AdminController', 'addMeoMenus' ) );
 
         endif;
     }
                 // Maak het menu aan en voeg de bootstrap scripts toe.
-                static function addMenus() {
+                static function addMeoMenus() {
                             $page0  =     add_menu_page( __( 'My Event Organiser Admin', 'my-event-organiser'), __( 'My Event Organiser', 'my-event-organiser' ),'','my-event-organiser-admin',array( 'MyEventOrganiser_AdminController', 'adminMenuPage'),'https://www.kevinschuit.com/images/20x20logoWit.png','3'); 
                             $page1  =     add_submenu_page ('my-event-organiser-admin',__( 'Dashboard', 'my-event-organiser' ),__( 'Dashboard', 'my-event-organiser'),'manage_options','meo_admin_dashboard', array( 'MyEventOrganiser_AdminController', 'adminSubMenuDashboard') );
                             $page2  =     

@@ -7,7 +7,7 @@
 
 // plug-in definities
 //Plug-in versie/
-define ( 'MY_EVENT_ORGANISER_VERSION', '0.0.1' );
+define ( 'MY_EVENT_ORGANISER_VERSION', '1.0.2' );
 // Wordpress versie
 define ( 'MY_EVENT_ORGANISER_REQUIRED_WP_VERSION', '5.9.3' );
 // plug-in basename
